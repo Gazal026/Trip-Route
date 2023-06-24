@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+  </head>
+  <body>
+    <div id="box">
+      <div id="textbox">
+        <input type="text" id="start" placeholder="Start" />
+        <div id="innerContainer" class="inputContainer"></div>
+        <input type="text" id="end" placeholder="End" />
+        <button id="stops">Add Stops</button>
+        <button id="route">Make Route</button>
+      </div>
+    </div>
+    <div id="map"></div>
+    <script src="jquery-3.7.0.min.js"></script>
+    <script src="jquery.js"></script>
+    <script src="script.js"></script>
+    <script
+      async
+      defer
+      src="https://maps.googleapis.com/maps/api/js?callback=initMap&libraries=geometry"
+    ></script>
+  </body>
+</html>

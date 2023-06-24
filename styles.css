@@ -1,0 +1,84 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#box {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 370px;
+  height: 100%; /* Subtract the height of the buttons */
+  left: 0;
+  top: 0;
+  z-index: 1;
+  background-color: rgba(244, 247, 247, 0.8);
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#innerContainer {
+  overflow-y: auto;
+  max-height: 30vh;
+  margin-top: 10px;
+}
+
+#start,
+#end,
+.inputTag input {
+  /* Styles for all text inputs */
+  width: 335px;
+  height: 45px;
+  margin-top: 10px;
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.inputTag {
+  position: relative;
+}
+
+.remove-icon {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #9ba4b5;
+  font-size: 40px;
+}
+
+button {
+  background-color: #9ba4b5;
+  border-radius: 5px;
+  height: 45px;
+  width: 150px;
+  font-family: "DM Sans", sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+#stops {
+  position: absolute;
+  bottom: 10px;
+  left: 20px;
+}
+
+#route {
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+}
