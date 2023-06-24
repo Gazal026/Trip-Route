@@ -1,5 +1,7 @@
 let n = 1;
 var clickedPlacesArray = [];
+let markers = [];
+let path = null;
 function initMap() {
   let location = { lat: 26.924150519735488, lng: 80.95402479171754 };
   map = new google.maps.Map(document.getElementById("map"), {
@@ -12,16 +14,14 @@ function initMap() {
       lat: e.latLng.lat(),
       lng: e.latLng.lng(),
     };
-    clickedPlacesArray.push(clickedPlace);
-    var marker = new google.maps.Marker({
-      position: e.latLng,
-      map: map,
-    });
+    // clickedPlacesArray.push(clickedPlace);
+    // var marker = new google.maps.Marker({
+    //   position: e.latLng,
+    //   map: map,
+    // });
 
     // Retrieve address and assign it to input field
-    const url = `https://nominatim.openstreetmap.org/reverse?lat=${marker
-      .getPosition()
-      .lat()}&lon=${marker.getPosition().lng()}&format=json`;
+    const url = `https://nominatim.openstreetmap.org/reverse?lat=${clickedPlace.lat}&lon=${clickedPlace.lng}&format=json`;
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
@@ -72,6 +72,13 @@ $(function () {
   });
 
   $("#route").on("click", async function () {
+    markers.forEach((marker) => {
+      marker.setMap(null);
+    });
+    markers = [];
+    if (path) {
+      path.setMap(null);
+    }
     textArray = []; // Clear the array before populating it again
     $("#textbox input").each(function () {
       textArray.push($(this).val()); // Add the text value to the array
@@ -95,6 +102,11 @@ $(function () {
       if (index < textArray.length) {
         var address = textArray[index];
         geocodeAddress(address, function (latLng) {
+          var marker = new google.maps.Marker({
+            position: latLng,
+            map: map,
+          });
+          markers.push(marker);
           coordinatesArray.push([latLng.lng, latLng.lat]);
           processPlaceholderAddresses(index + 1, callback);
         });
@@ -102,15 +114,6 @@ $(function () {
         callback();
       }
     }
-
-    // // Function to process clicked places
-    // function processClickedPlaces(callback) {
-    //   clickedPlacesArray.forEach(function (clickedPlace) {
-    //     coordinatesArray.push([clickedPlace.lng, clickedPlace.lat]);
-    //   });
-    //   callback();
-    // }
-
     await processPlaceholderAddresses(0, async function () {
       //await processClickedPlaces(async function () {
       console.log(coordinatesArray);
@@ -135,9 +138,47 @@ $(function () {
         },
         body: requestBody,
       });
+      function convertCoordinates(data) {
+        var coordinates = data.map(function (coordinate) {
+          return {
+            lat: coordinate[1],
+            lng: coordinate[0],
+          };
+        });
 
+        return coordinates;
+      }
+      let pathcoordinateslatlng = [];
       const data = await resp.json();
       console.log(data);
+      let pathcoordinates = [];
+      data.paths[0].points.coordinates.forEach((element) => {
+        pathcoordinates.push(element);
+      });
+      // console.log(pathcoordinates);
+      let i = 0;
+      pathcoordinates.forEach((element) => {
+        // console.log(element);
+        // // console.log(element[0] + " " + element[1]);
+        pathcoordinateslatlng.push({ lat: element[1], lng: element[0] });
+        // i++;
+      });
+      // console.log(pathcoordinateslatlng);
+      function drawPath(coordinates) {
+        var pathCoordinates = coordinates.map(function (coordinate) {
+          return new google.maps.LatLng(coordinate.lat, coordinate.lng);
+        });
+        path = new google.maps.Polyline({
+          path: pathCoordinates,
+          geodesic: true,
+          strokeColor: "#0000FF",
+          strokeOpacity: 1.0,
+          strokeWeight: 2,
+        });
+
+        path.setMap(map);
+      }
+      drawPath(pathcoordinateslatlng);
 
       // Process the response data from GraphHopper API here
       //});
