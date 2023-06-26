@@ -2,6 +2,8 @@ let n = 1;
 var clickedPlacesArray = [];
 let markers = [];
 let path = null;
+let modeTravel = "car";
+
 function initMap() {
   let location = { lat: 26.924150519735488, lng: 80.95402479171754 };
   map = new google.maps.Map(document.getElementById("map"), {
@@ -71,6 +73,12 @@ $(function () {
     $("#" + inputTagId).remove();
   });
 
+  $(".vehicle").on("click", function () {
+    $(".vehicle").css("color", "#67676c");
+    modeTravel = $(this).attr("id");
+    $("#" + modeTravel).css("color", "black");
+  });
+
   $("#route").on("click", async function () {
     markers.forEach((marker) => {
       marker.setMap(null);
@@ -108,6 +116,10 @@ $(function () {
           });
           markers.push(marker);
           coordinatesArray.push([latLng.lng, latLng.lat]);
+          if (index === 0) {
+            map.setCenter(latLng);
+            map.setZoom(6);
+          }
           processPlaceholderAddresses(index + 1, callback);
         });
       } else {
@@ -120,7 +132,7 @@ $(function () {
 
       const requestBody = JSON.stringify({
         points: coordinatesArray,
-        vehicle: "car",
+        vehicle: modeTravel,
         locale: "en",
         instructions: true,
         calc_points: true,
@@ -151,6 +163,30 @@ $(function () {
       let pathcoordinateslatlng = [];
       const data = await resp.json();
       console.log(data);
+      const distance = data.paths[0].distance;
+      const time = data.paths[0].time;
+
+      let days = Math.floor(time / (1000 * 60 * 60 * 24));
+      let hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      let minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
+      let seconds = Math.floor((time % (1000 * 60)) / 1000);
+
+      $("#Distance").text("Distance: " + distance / 1000 + " km");
+      let estimatedTime = "Estimated Time: ";
+      if (days > 0) {
+        estimatedTime += days + " days ";
+      }
+      if (hours > 0) {
+        estimatedTime += hours + " hours ";
+      }
+      if (minutes > 0) {
+        estimatedTime += minutes + " minutes ";
+      }
+      if (seconds > 0) {
+        estimatedTime += seconds + " seconds ";
+      }
+      $("#Estimated_time").text(estimatedTime.trim());
+
       let pathcoordinates = [];
       data.paths[0].points.coordinates.forEach((element) => {
         pathcoordinates.push(element);

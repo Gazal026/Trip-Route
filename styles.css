@@ -82,3 +82,19 @@ button {
   bottom: 10px;
   right: 20px;
 }
+
+.iconContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.iconContainer .material-icons {
+  cursor: pointer;
+  color: #67676c;
+}
+
+.iconContainer .material-icons:hover {
+  color: #000000;
+}

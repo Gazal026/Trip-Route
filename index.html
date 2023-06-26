@@ -9,6 +9,10 @@
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
     />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
   </head>
@@ -18,6 +22,21 @@
         <input type="text" id="start" placeholder="Start" />
         <div id="innerContainer" class="inputContainer"></div>
         <input type="text" id="end" placeholder="End" />
+        <br />
+        <br />
+        <div class="iconContainer">
+          <span class="material-icons vehicle" id="foot">directions_walk</span>
+          <span class="material-icons vehicle" id="bike">
+            directions_bike
+          </span>
+          <span class="material-icons vehicle" id="car"> directions_car </span>
+        </div>
+        <br />
+        <div class="textContainer">
+          <p id="Mode"></p>
+          <p id="Distance"></p>
+          <p id="Estimated_time"></p>
+        </div>
         <button id="stops">Add Stops</button>
         <button id="route">Make Route</button>
       </div>
